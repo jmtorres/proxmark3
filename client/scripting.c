@@ -571,12 +571,20 @@ static int l_hardnested(lua_State *L){
 	for (int i = 0; i < 32; i += 2) {
 		sscanf(&p_key[i], "%02x", &tmp);
 		key[i / 2] = tmp & 0xFF;
-		if (haveTarget) {
+		if (false && haveTarget) {
 			sscanf(&p_trgkey[i], "%02x", &tmp);
 			trgkey[i / 2] = tmp & 0xFF;
 		}
 	}
 	
+        PrintAndLogEx(NORMAL, "--target block no:%3d, target key type:%c, known target key: 0x%02x%02x%02x%02x%02x%02x, file action: %s, Slow: %s, Tests: %d ", 
+                        trgBlockNo, 
+                        trgKeyType?'B':'A', 
+                        trgkey[0], trgkey[1], trgkey[2], trgkey[3], trgkey[4], trgkey[5],
+                        nonce_file_write ? "write": nonce_file_read ? "read" : "none",
+                        slow ? "Yes" : "No",
+                        tests);
+
     uint64_t foundkey = 0;
 	int retval = mfnestedhard(blockNo, keyType, key, trgBlockNo, trgKeyType, haveTarget ? trgkey : NULL, nonce_file_read,  nonce_file_write,  slow,  tests, &foundkey, filename);
 	DropField();
