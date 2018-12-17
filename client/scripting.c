@@ -513,7 +513,7 @@ static int l_reveng_RunModel(lua_State *L){
 
 static int l_hardnested(lua_State *L){
 
-	bool haveTarget = true;
+	bool haveTarget = false;
 	size_t size;
 	uint32_t tmp;
 	const char *p_blockno = luaL_checklstring(L, 1, &size);
