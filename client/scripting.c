@@ -532,7 +532,7 @@ static int l_hardnested(lua_State *L){
 	if(size != 1)  return returnToLuaWithError(L,"Wrong size of trgKeyType, got %d bytes, expected 1", (int) size);
 
 	const char *p_trgkey = luaL_checklstring(L, 6, &size);
-	if(size != 12) haveTarget = false;
+	if(size != 12) haveTarget = true;
 
 	const char *p_nonce_file_read = luaL_checklstring(L, 7, &size);
 	if(size != 1)  return returnToLuaWithError(L,"Wrong size of nonce_file_read, got %d bytes, expected 1", (int) size);
@@ -548,8 +548,7 @@ static int l_hardnested(lua_State *L){
 	
 	char filename[FILE_PATH_SIZE]="nonces.bin";
 	const char *p_filename = luaL_checklstring(L, 11, &size);
-	if(size != 0)
-		strcpy(filename, p_filename);
+	if(size != 0) strcpy(filename, p_filename);
 
 	uint8_t blockNo = 0;
 	uint8_t keyType = 0;
@@ -559,25 +558,24 @@ static int l_hardnested(lua_State *L){
 	bool nonce_file_write = false;
 	bool slow = false;
 	int tests = 0;
-	sscanf(p_blockno, "%02x", &blockNo);
-	sscanf(p_keytype, "%x", &keyType);
-	sscanf(p_trg_blockno, "%02x", &trgBlockNo);
-	sscanf(p_trg_keytype, "%x", &trgKeyType);
-	sscanf(p_nonce_file_read, "%x", &nonce_file_read);
-	sscanf(p_nonce_file_write, "%x", &nonce_file_write);
-
-	sscanf(p_slow, "%x", &slow);
+	sscanf(p_blockno, "%02hhx", &blockNo);
+	sscanf(p_keytype, "%hhx", &keyType);
+	sscanf(p_trg_blockno, "%02hhx", &trgBlockNo);
+	sscanf(p_trg_keytype, "%hhx", &trgKeyType);
+	sscanf(p_nonce_file_read, "%hhx", &nonce_file_read);
+	sscanf(p_nonce_file_write, "%hhx", &nonce_file_write);
+	sscanf(p_slow, "%hhx", &slow);
 	sscanf(p_tests, "%x", &tests);
 
 	uint8_t key[6] = {0,0,0,0,0,0};
 	uint8_t trgkey[6] = {0,0,0,0,0,0};
 	for (int i = 0; i < 32; i += 2) {
-		sscanf(&p_key[i], "%02x", &tmp);
+		sscanf(&p_key[i], "%02hhx", &tmp);
 		key[i / 2] = tmp & 0xFF;
-		/*if (haveTarget) {
-			sscanf(&p_trgkey[i], "%02x", &tmp);
+		if (haveTarget) {
+			sscanf(&p_trgkey[i], "%02hhx", &tmp);
 			trgkey[i / 2] = tmp & 0xFF;
-		}*/
+		}
 	}
 	
     PrintAndLogEx(NORMAL, "--known block no:%3d, known key type:%c, known key: 0x%02x%02x%02x%02x%02x%02x%s, target block no:%3d, target key type:%c, known target key: 0x%02x%02x%02x%02x%02x%02x, file action: %s, Slow: %s, Tests: %d ",
