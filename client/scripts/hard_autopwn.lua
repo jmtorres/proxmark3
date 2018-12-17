@@ -169,7 +169,7 @@ function main(args)
 				keyA = utils.ConvertHexToAscii(key)
 			else
 				local foundkey = ""
-                                local err, retval = core.hardnested(blockno, keytype, key, trgblockno, tostring(targetkeytype), trgkey, 0,0,0,0,foundkey)
+				local err, retval = core.hardnested(blockno, keytype, key, trgblockno, tostring(targetkeytype), trgkey, 0,0,0,0,foundkey)
 				foundkey = foundkey or ""
 				
 				if targetkeytype == 0 then

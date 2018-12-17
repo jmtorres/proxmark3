@@ -578,17 +578,18 @@ static int l_hardnested(lua_State *L){
 		}
 	}
 	
-    PrintAndLogEx(NORMAL, "--known block no:%3d, known key type:%c, known key: 0x%02x%02x%02x%02x%02x%02x%s, target block no:%3d, target key type:%c, known target key: 0x%02x%02x%02x%02x%02x%02x, file action: %s, Slow: %s, Tests: %d ",
-        blockNo,
-        keyType?'B':'A',
-        key[0], key[1], key[2], key[3], key[4], key[5],
-        trgBlockNo,
-        trgKeyType?'B':'A',
-        trgkey[0], trgkey[1], trgkey[2], trgkey[3], trgkey[4], trgkey[5],
-        haveTarget ? "" : " (not set)",
-        nonce_file_write ? "write": nonce_file_read ? "read" : "none",
-        slow ? "Yes" : "No",
-        tests);
+	//PrintAndLogEx(NORMAL, "--known block no:%3d, known key type:%c, known key: 0x%02x%02x%02x%02x%02x%02x%s, target block no:%3d, target key type:%c, known target key: 0x%02x%02x%02x%02x%02x%02x, file action: %s, Slow: %s, Tests: %d ",
+	PrintAndLogEx(NORMAL, "--known block no:%3d, known key type:%c, known key: 0x%02x%02x%02x%02x%02x%02x, target block no:%3d, target key type:%c, known target key: 0x%02x%02x%02x%02x%02x%02x, file action: %s, Slow: %s, Tests: %d ",
+		blockNo,
+		keyType?'B':'A',
+		key[0], key[1], key[2], key[3], key[4], key[5],
+		trgBlockNo,
+		trgKeyType?'B':'A',
+		trgkey[0], trgkey[1], trgkey[2], trgkey[3], trgkey[4], trgkey[5],
+		haveTarget ? "" : " (not set)",
+		nonce_file_write ? "write": nonce_file_read ? "read" : "none",
+		slow ? "Yes" : "No",
+		tests);
 
 	uint64_t foundkey = 0;
 	int retval = mfnestedhard(blockNo, keyType, key, trgBlockNo, trgKeyType, haveTarget ? trgkey : NULL, nonce_file_read,  nonce_file_write,  slow,  tests, &foundkey, filename);
